@@ -8,7 +8,13 @@ This guide covers the **core basics** you need to get started with C++. Work thr
 
 ## 1. Setup & First Program
 - Install a compiler (GCC / Clang / MSVC)
+    * [MSVC](./docs/%20MSVC/%20MSVC.md)
+    * [Clang](./docs/Clang/Clang.md)
+    * [GCC](./docs/GCC/GCC.md)
 - Install an IDE or editor (VS Code + C/C++ extension, Visual Studio, CLion)
+    * [ ] Vs Code + C/C++ extension
+    * [ ] Visual Studio
+    * [ ] Clion
 - Understand the compilation process (`.cpp` → object file → executable)
 - Write, compile, and run your first `Hello World` program
 - Learn basic terminal / command-line usage
