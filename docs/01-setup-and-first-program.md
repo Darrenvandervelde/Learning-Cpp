@@ -15,7 +15,7 @@ Get a working C++ development environment and run your first program.
 ```bash
 xcode-select --install
 ```
-This installs Clang.
+This installs Clang. What is Clang used for and how does it operate. [Click Here](./Clang/Clang.md).
 
 ### Linux (Ubuntu/Debian)
 ```bash
