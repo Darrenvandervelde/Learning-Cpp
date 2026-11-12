@@ -10,6 +10,9 @@ bool isRunning = true;
 string adventuresName;
 int choice;
 
+// Player Stats Variables
+int intelligence;
+
 // Show States
 void showStats() {
     cout << "\n-----------" << '\n';
@@ -32,7 +35,9 @@ void chapterOne() {
     cout << "" << '\n';
 
     if (choice == 1) {
-        cout << "";
+        cout << "I started moving forward on the path into the woods. As every step forward I get futher away from the entrance of the forest." << '\n';
+
+        intelligence += 2;
 
         // Choice Template need to config the rules of the world before continue to build the choice system. :)
         if (choice) {
@@ -52,7 +57,7 @@ void chapterOne() {
     }
 
     switch (choice) {
-        case 1: 
+        case 1:
             break;
         case 2: 
             break;
