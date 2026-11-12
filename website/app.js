@@ -77,7 +77,9 @@
   async function getModuleMarkdown(module) {
     if (state.cache.has(module.number)) return state.cache.get(module.number);
     const path = "content/modules/" + module.slug + "/README.md";
-    const response = await fetch(path);
+    let response = await fetch(path);
+    // Local preview fallback: when serving the repository root, read the original module folder.
+    if (!response.ok) response = await fetch("../modules/" + module.slug + "/README.md");
     if (!response.ok) throw new Error("Could not load " + path + " (HTTP " + response.status + ").");
     const markdown = await response.text();
     state.cache.set(module.number, markdown);
