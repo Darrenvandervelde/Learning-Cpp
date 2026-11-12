@@ -67,10 +67,10 @@
       html: false, linkify: true, typographer: true, breaks: false,
       highlight(code, language) {
         if (window.hljs && language && hljs.getLanguage(language)) {
-          try { return '<pre><code class="hljs language-' + language + '">' + hljs.highlight(code, { language }).value + '</code></pre>'; } catch {}
+          try { return hljs.highlight(code, { language }).value; } catch {}
         }
-        if (window.hljs) return '<pre><code class="hljs">' + hljs.highlightAuto(code).value + '</code></pre>';
-        return '<pre><code>' + markdownit().utils.escapeHtml(code) + '</code></pre>';
+        if (window.hljs) return hljs.highlightAuto(code).value;
+        return "";
       }
     });
   }
