@@ -10,6 +10,10 @@ A practical, assessment driven C++20 learning repository. The goal is to underst
 
 The course is designed with reference to published computing education and accreditation guidance. This repository is not an accredited degree programme and does not award academic credit.
 
+## Interactive learning website
+
+The repository includes a W3Schools-inspired [C++ Game Development Academy](website/README.md). It presents the 20-module curriculum in a responsive lesson interface with topic search, code-copy controls and browser-local progress tracking. The website reads directly from the module documentation, keeping the written curriculum as the source of truth. See the [website setup and deployment guide](website/README.md) for local preview and GitHub Pages configuration.
+
 ## Start here
 
 1. Read [the modular learning path](modules/README.md).
