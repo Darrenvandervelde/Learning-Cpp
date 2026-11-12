@@ -9,22 +9,16 @@ These examples are small and independently buildable. Their purpose is to demons
 | File | Concept | Expected behaviour |
 |---|---|---|
 | hello_world.cpp | Entry point and standard output | Prints a greeting |
-| player_status.cpp | Multiple output statements | Prints a simple status panel |
+
+The player status program is an independent exercise. Its solution is intentionally not included in the examples directory.
 
 ## 3. Build procedure
 
-Open PowerShell in this directory and compile one source file at a time.
+Open PowerShell in this directory and compile the example.
 
 ~~~powershell
 g++ -std=c++20 -Wall -Wextra -Wpedantic hello_world.cpp -o hello_world.exe
 .\hello_world.exe
-~~~
-
-Build the second example:
-
-~~~powershell
-g++ -std=c++20 -Wall -Wextra -Wpedantic player_status.cpp -o player_status.exe
-.\player_status.exe
 ~~~
 
 ## 4. Required experiments
