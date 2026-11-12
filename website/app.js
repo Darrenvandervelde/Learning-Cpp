@@ -3,7 +3,7 @@
   const $ = (selector) => document.querySelector(selector);
   const state = { modules: [], active: 0, completed: new Set(), cache: new Map() };
   const progressKey = "learning-cpp.completed.v1";
-  const sourceRoot = "https://github.com/Darrenvandervelde/Learning-Cpp/tree/curriculum/20-modular-lessons/modules/";
+  const sourceRoot = "https://github.com/Darrenvandervelde/Learning-Cpp/tree/main/modules/";
 
   function loadProgress() {
     try { state.completed = new Set(JSON.parse(localStorage.getItem(progressKey) || "[]")); }
