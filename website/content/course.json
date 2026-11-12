@@ -1,0 +1,275 @@
+{
+  "title": "C++ Game Development",
+  "description": "A structured C++20 path from first principles to game engine engineering.",
+  "modules": [
+    {
+      "number": "01",
+      "title": "Toolchain, compilation and first program",
+      "description": "Understand how C++ source becomes a running program.",
+      "track": "Foundations",
+      "duration": "18–24 hours",
+      "slug": "toolchain-compilation-first-program",
+      "tags": [
+        "compiler",
+        "compilation",
+        "linker",
+        "executable"
+      ]
+    },
+    {
+      "number": "02",
+      "title": "Program structure, headers and namespaces",
+      "description": "Organise code into translation units and maintainable interfaces.",
+      "track": "Foundations",
+      "duration": "12–16 hours",
+      "slug": "program-structure-headers-namespaces",
+      "tags": [
+        "headers",
+        "namespaces",
+        "linkage"
+      ]
+    },
+    {
+      "number": "03",
+      "title": "Types, variables and constants",
+      "description": "Model game data safely with C++ types and initialization.",
+      "track": "Foundations",
+      "duration": "10–14 hours",
+      "slug": "types-variables-constants",
+      "tags": [
+        "types",
+        "variables",
+        "const"
+      ]
+    },
+    {
+      "number": "04",
+      "title": "Console input and output",
+      "description": "Read, parse and validate player input and game configuration.",
+      "track": "Foundations",
+      "duration": "8–12 hours",
+      "slug": "console-input-output",
+      "tags": [
+        "iostream",
+        "input",
+        "output",
+        "validation"
+      ]
+    },
+    {
+      "number": "05",
+      "title": "Operators and expressions",
+      "description": "Understand arithmetic, comparisons, conversions and expressions.",
+      "track": "Foundations",
+      "duration": "8–12 hours",
+      "slug": "operators-expressions",
+      "tags": [
+        "operators",
+        "expressions",
+        "arithmetic"
+      ]
+    },
+    {
+      "number": "06",
+      "title": "Decisions and loops",
+      "description": "Build game rules, menus, state transitions and iteration.",
+      "track": "Foundations",
+      "duration": "10–14 hours",
+      "slug": "decisions-and-loops",
+      "tags": [
+        "if",
+        "switch",
+        "loops",
+        "game state"
+      ]
+    },
+    {
+      "number": "07",
+      "title": "Functions and interfaces",
+      "description": "Design small, testable functions with clear contracts.",
+      "track": "Foundations",
+      "duration": "10–14 hours",
+      "slug": "functions-interfaces",
+      "tags": [
+        "functions",
+        "parameters",
+        "interfaces"
+      ]
+    },
+    {
+      "number": "08",
+      "title": "Arrays, strings and views",
+      "description": "Represent text and sequences while understanding bounds and views.",
+      "track": "Foundations",
+      "duration": "12–16 hours",
+      "slug": "arrays-strings-views",
+      "tags": [
+        "array",
+        "string",
+        "string_view",
+        "span"
+      ]
+    },
+    {
+      "number": "09",
+      "title": "Structs, enums and value types",
+      "description": "Create domain types for players, enemies, items and states.",
+      "track": "Core C++",
+      "duration": "12–16 hours",
+      "slug": "structs-enums-value-types",
+      "tags": [
+        "struct",
+        "enum",
+        "value types"
+      ]
+    },
+    {
+      "number": "10",
+      "title": "Classes and encapsulation",
+      "description": "Protect invariants and design cohesive game objects.",
+      "track": "Core C++",
+      "duration": "14–18 hours",
+      "slug": "classes-encapsulation",
+      "tags": [
+        "classes",
+        "encapsulation",
+        "composition"
+      ]
+    },
+    {
+      "number": "11",
+      "title": "Constructors, destructors and lifetime",
+      "description": "Understand object construction, destruction and RAII.",
+      "track": "Core C++",
+      "duration": "14–18 hours",
+      "slug": "constructors-destructors-lifetime",
+      "tags": [
+        "constructors",
+        "destructors",
+        "RAII",
+        "lifetime"
+      ]
+    },
+    {
+      "number": "12",
+      "title": "Pointers, references and const",
+      "description": "Use indirection safely and understand aliasing and lifetime.",
+      "track": "Memory",
+      "duration": "14–18 hours",
+      "slug": "pointers-references-const",
+      "tags": [
+        "pointers",
+        "references",
+        "const"
+      ]
+    },
+    {
+      "number": "13",
+      "title": "Ownership, dynamic memory and smart pointers",
+      "description": "Express ownership with RAII, unique_ptr and shared_ptr.",
+      "track": "Memory",
+      "duration": "16–20 hours",
+      "slug": "ownership-dynamic-memory-smart-pointers",
+      "tags": [
+        "ownership",
+        "unique_ptr",
+        "shared_ptr",
+        "memory"
+      ]
+    },
+    {
+      "number": "14",
+      "title": "Copy, move and value semantics",
+      "description": "Control resource transfer and avoid unnecessary copies.",
+      "track": "Modern C++",
+      "duration": "14–18 hours",
+      "slug": "copy-move-value-semantics",
+      "tags": [
+        "copy",
+        "move",
+        "move semantics"
+      ]
+    },
+    {
+      "number": "15",
+      "title": "Containers, algorithms and iterators",
+      "description": "Use the standard library and reason about complexity and locality.",
+      "track": "Modern C++",
+      "duration": "16–20 hours",
+      "slug": "containers-algorithms-iterators",
+      "tags": [
+        "vector",
+        "containers",
+        "algorithms",
+        "iterators"
+      ]
+    },
+    {
+      "number": "16",
+      "title": "Templates, concepts and compile time",
+      "description": "Build reusable generic components with compile-time constraints.",
+      "track": "Modern C++",
+      "duration": "18–22 hours",
+      "slug": "templates-concepts-compile-time",
+      "tags": [
+        "templates",
+        "concepts",
+        "constexpr"
+      ]
+    },
+    {
+      "number": "17",
+      "title": "Errors, debugging and testing",
+      "description": "Investigate defects with diagnostics, tests and sanitizers.",
+      "track": "Engineering",
+      "duration": "14–18 hours",
+      "slug": "errors-debugging-testing",
+      "tags": [
+        "debugging",
+        "testing",
+        "sanitizers"
+      ]
+    },
+    {
+      "number": "18",
+      "title": "CMake, multiple files and Git",
+      "description": "Build reproducible multi-file projects and collaborate with Git.",
+      "track": "Engineering",
+      "duration": "14–18 hours",
+      "slug": "cmake-multifile-git",
+      "tags": [
+        "CMake",
+        "Git",
+        "build system"
+      ]
+    },
+    {
+      "number": "19",
+      "title": "Console game architecture and game loop",
+      "description": "Integrate game state, entities, update order and timing.",
+      "track": "Game systems",
+      "duration": "20–26 hours",
+      "slug": "console-game-architecture-loop",
+      "tags": [
+        "game loop",
+        "state",
+        "entities",
+        "delta time"
+      ]
+    },
+    {
+      "number": "20",
+      "title": "Engineering quality, profiling and next steps",
+      "description": "Apply testing, profiling and architecture principles to future engine work.",
+      "track": "Game systems",
+      "duration": "18–24 hours",
+      "slug": "engineering-quality-profiling-next-steps",
+      "tags": [
+        "profiling",
+        "performance",
+        "architecture",
+        "engine"
+      ]
+    }
+  ]
+}
