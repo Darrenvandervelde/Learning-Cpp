@@ -1,304 +1,414 @@
-# Module 01: Toolchain, Compilation and Your First Program
+# Module 01: The C++ Toolchain, Translation, Linking and Program Execution
 
-## 1. Module specification
+## 1. Academic unit specification
 
-**Level:** Introductory undergraduate programming
+**Level:** Undergraduate computer science, introductory systems programming  
+**Suggested workload:** 18 to 24 focused study hours  
+**Language baseline:** ISO C++20  
+**Primary environment:** Windows PowerShell with MSYS2 GCC; equivalent GCC, Clang and MSVC workflows are documented  
+**Application context:** Build the first reproducible executable for the cumulative console game, The Last Signal  
+**Prerequisites:** Basic computer literacy, ability to edit text files and navigate directories. No prior C++ knowledge is assumed.
 
-**Suggested study time:** 8 to 10 hours
+This unit establishes the mental model required to work confidently on real C++ projects. The aim is not merely to memorise a compiler command. The student will explain how source text becomes a program image, how a toolchain constructs that image, how an operating system starts a process, and how to investigate failures at each boundary.
 
-**Prerequisites:** Ability to create folders and files, use a terminal and edit plain text. No previous C++ knowledge is required.
+The unit deliberately avoids classes, pointers, dynamic allocation and game frameworks. Those topics depend on an accurate understanding of translation, program structure and execution.
 
-**Language standard:** C++20
+## 2. Why this unit matters to game engineering
 
-**Primary compiler:** GCC through MSYS2 on Windows
+A game engine is a collection of separately compiled components: platform code, rendering, input, audio, physics, gameplay, tools and tests. A developer who cannot distinguish compilation from linking will struggle to diagnose missing definitions, duplicate symbols, incompatible libraries and incorrect build configurations.
 
-**Application context:** Establish a reproducible development environment for a small console game called The Last Signal.
+The same mental model applies whether the final product is a tiny console program or a multi-million-line engine. The scale changes; the boundaries between source, translation, object code, linking and process execution remain important.
 
-## 2. Module description
+Consider a future engine build:
 
-This module introduces the C++ development toolchain and the transformation of source code into an executable program. Students learn the responsibilities of the preprocessor, compiler, assembler where applicable, linker, runtime library and operating system loader.
+1. `main.cpp` defines the application entry point.
+2. `renderer.cpp` implements rendering operations.
+3. `input.cpp` implements input operations.
+4. Each implementation file is compiled as a translation unit.
+5. The linker resolves references between the resulting object files and required libraries.
+6. The operating system loads the executable and creates a process.
+7. Runtime startup code establishes the hosted C++ environment before the program's `main` function is entered.
 
-The module establishes a disciplined workflow: inspect the compiler, write source code, compile with an explicit language standard and warnings, execute the resulting program, inspect diagnostics and record reproducible evidence.
-
-The module intentionally begins without classes, pointers, dynamic allocation or a game framework. The objective is to understand the complete path from a small source file to a running process.
+This module teaches the first version of that pipeline using one source file, then asks you to inspect the stages.
 
 ## 3. Learning outcomes
 
-By the end of this module, the student will be able to:
+On successful completion, the student can:
 
-1. Identify the compiler, compiler driver, linker, executable and runtime environment.
-2. Describe the major stages between C++ source code and program execution.
-3. Explain the roles of preprocessing directives and standard library headers.
-4. Compile a C++20 source file using GCC and warning options.
-5. Execute the resulting program from PowerShell.
-6. Distinguish a compiler diagnostic from a linker diagnostic and a runtime failure.
-7. Interpret a simple syntax diagnostic and correct the underlying source.
-8. Explain why successful compilation does not establish program correctness.
-9. Produce a reproducible record containing source code, compiler version, build command and observed output.
+1. Explain the distinction between source text, a translation unit, object code, an executable file and a running process.
+2. Describe the roles of the compiler driver, preprocessor, compiler front end, optimizer, code generator, assembler, linker, runtime support and operating system loader.
+3. Explain why a header provides declarations and definitions to a translation unit but is not itself a separately linked library.
+4. Explain the conceptual purpose of declarations, definitions, symbols and relocation records without yet requiring advanced language knowledge.
+5. Build a C++20 program with a documented compiler, target and warning policy.
+6. Inspect preprocessing output, assembly output and object files using GCC driver options.
+7. Distinguish source diagnostics, link failures, loader failures, runtime failures and logic defects.
+8. Explain why successful compilation and one successful execution do not prove correctness.
+9. Produce a reproducible build record that another developer can follow.
+10. Communicate a technical investigation using evidence rather than guesses.
 
-## 4. Key terminology
+## 4. Unit map
 
-| Term | Meaning |
-|---|---|
-| Source file | A text file containing C++ source code |
-| Preprocessor | Processes directives such as include before normal compilation |
-| Translation unit | The source file after preprocessing, considered with its included declarations |
-| Compiler | Translates C++ constructs into a lower level representation and diagnoses violations |
-| Object file | A compiled file containing machine code and related information, often with unresolved references |
-| Assembler | Produces object code from assembly language when the toolchain uses this stage |
-| Linker | Combines object files and libraries and resolves external references |
-| Executable | A program image that the operating system can load |
-| Runtime | The environment and library support used while a program executes |
-| Diagnostic | A compiler or linker message describing an error, warning or other event |
-| Build | The process of producing program artifacts from source and dependencies |
+The unit is delivered as ten lessons. Work through them in order.
 
-## 5. Topic sequence
+| Lesson | Topic | Main evidence |
+|---|---|---|
+| 01 | What C++ is and where a program runs | Explain source, machine instructions, CPU and operating system |
+| 02 | Development environment and toolchain | Identify compiler executable, version, target and shell path |
+| 03 | Anatomy of a hosted C++ program | Annotate a minimal program statement by statement |
+| 04 | Translation and compilation pipeline | Inspect preprocessed source, assembly and object output |
+| 05 | Symbols, declarations and linking | Explain a two-file build and an unresolved external |
+| 06 | Program loading, startup and runtime | Distinguish executable image from process and runtime state |
+| 07 | Diagnostics and systematic debugging | Classify and investigate deliberately introduced failures |
+| 08 | Language modes, warnings and build configurations | Reproduce a documented C++20 Debug-style build |
+| 09 | Build automation and CMake foundations | Configure and build a small target in an isolated build directory |
+| 10 | First console program and engineering review | Deliver the independent console artifact and defend design choices |
 
-### 5.1 The development toolchain
+Do not skip directly to Lesson 10. The final task depends on concepts introduced earlier.
 
-A toolchain is a coordinated set of programs used to transform and build software. A typical C++ environment includes a compiler driver, compiler front end, code generation tools, assembler, linker, standard library and system libraries.
+## 5. Core conceptual model
 
-The command g++ is commonly used as a compiler driver. It coordinates several stages and selects the C++ language mode when given an appropriate option. The command does more than one isolated translation step.
+A useful high-level model is:
 
-### 5.2 The build pipeline
+```text
+C++ source files
+      |
+      v
+Preprocessing
+      |
+      v
+Translation units
+      |
+      v
+C++ compilation and code generation
+      |
+      v
+Object files
+      |
+      v
+Linking with other objects and libraries
+      |
+      v
+Executable program image
+      |
+      v
+Operating system loading and process creation
+      |
+      v
+Runtime startup and main()
+      |
+      v
+Program execution and termination
+```
 
-A useful conceptual sequence is:
+This is a conceptual model, not a claim that every toolchain exposes every stage as a separate file or process. A compiler driver can invoke several tools, combine stages, use intermediate representations that are never written to disk, and select platform-specific startup files and libraries.
 
-1. Preprocessing expands included headers and processes conditional compilation directives.
-2. Compilation analyses C++ syntax and semantics and produces a lower level representation.
-3. Code generation and assembly produce object code according to the toolchain.
-4. Linking combines object files and libraries and resolves external symbols.
-5. The operating system loads the executable and begins program execution.
+### 5.1 Source file
 
-Toolchains may combine or internally reorganize these stages. The sequence is a learning model, not a promise that every compiler writes a separate file for every stage.
+A source file is human-readable text, commonly stored with a `.cpp` extension. It contains tokens and language constructs that an implementation processes according to the C++ language rules.
 
-### 5.3 Source code and the entry point
+The file itself is not a running program. Editing `main.cpp` changes text on disk. It does not retroactively modify an executable that was already built from an earlier version.
 
-A hosted C++ program normally begins execution in main. The return type int communicates a status code to the host environment. Returning zero conventionally indicates successful termination.
+### 5.2 Translation unit
 
-### 5.4 Headers and standard output
+A translation unit is the result of preprocessing a source file. It includes the source content after directives have been processed and included content has been made available. The compiler analyses each translation unit according to C++ rules.
 
-The directive include iostream makes declarations for standard input and output facilities available to the translation unit. std::cout is an output stream object. The insertion operator sends values to that stream.
+A project with five `.cpp` implementation files normally has five translation units. Headers are commonly included into translation units; they are not normally compiled as independent program units in the same way as implementation files.
 
-The std:: prefix identifies a name in the standard library namespace. It avoids relying on unqualified names.
+### 5.3 Object file
 
-### 5.5 Language standard and diagnostics
+An object file is a toolchain artifact containing relocatable machine code and associated information. Depending on the object format, it can contain sections for instructions, data, symbols, relocations, debugging information and metadata.
 
-The option -std=c++20 requests C++20 language mode from GCC. The options -Wall, -Wextra and -Wpedantic enable additional diagnostic checks. Warnings are not proof of a defect, but they are evidence that code deserves inspection.
+An object file may refer to a function whose implementation is located in another object file. The linker uses symbol and relocation information to combine compatible artifacts and resolve references.
 
-Warnings do not detect every logic error, memory error or invalid runtime condition. A clean build is one part of verification, not the end of it.
+### 5.4 Executable and process
 
-### 5.6 Compiler errors, linker errors and runtime errors
+An executable is a file in a platform-specific format that the operating system can load. A process is an operating system execution instance with its own virtual address space and resources.
 
-A syntax error may prevent compilation. An unresolved external symbol may be reported during linking. A program that builds successfully may still produce incorrect output, terminate unexpectedly or violate runtime requirements.
+The executable file is stored on disk. The process is a live execution environment. Multiple processes can be created from the same executable file. A process can also modify its own memory without modifying the executable file on disk.
 
-Students must identify the stage that produced a failure before attempting a fix.
+## 6. Lesson content
 
-## 6. Guided example
+### Lesson 01: What C++ is and where a program runs
 
-Create main.cpp:
+Study the difference between a programming language, compiler implementation, machine instruction set and operating system. C++ source expresses operations and constraints. A compiler implementation translates valid source for a selected target. A CPU executes machine instructions supported by its architecture. The operating system provides process and resource services.
 
-~~~cpp
+Do not say that the CPU directly understands C++ source. Do not say that the compiler is the CPU. These are distinct layers.
+
+**Check:** Explain why the same C++ source can be built into different executables for different processor architectures or operating systems.
+
+### Lesson 02: Development environment and toolchain
+
+A toolchain is a coordinated collection of programs and libraries used to build software. The command typed by a developer is often a driver. GCC's `g++`, LLVM's `clang++` and Microsoft's `cl.exe` accept different command-line conventions and coordinate different platform tools.
+
+The shell's search path determines which executable is selected when a command name is entered. A computer can have multiple compiler installations. Therefore, recording only “GCC is installed” is not reproducible evidence. Record the version, target and selected executable path.
+
+PowerShell investigation:
+
+```powershell
+g++ --version
+where.exe g++
+g++ -dumpmachine
+```
+
+The exact output depends on the installation. Explain what each command tells you; do not copy another machine's output as your own evidence.
+
+### Lesson 03: Anatomy of a hosted C++ program
+
+Use this minimal program:
+
+```cpp
 #include <iostream>
 
 int main()
 {
-    std::cout << "THE LAST SIGNAL\n";
-    std::cout << "Player health: 100\n";
+    std::cout << "The Last Signal\\n";
+    return 0;
+}
+```
+
+The `#include` line is a preprocessing directive. The header makes declarations for standard input and output facilities available to this translation unit. It does not mean that an entire standard library implementation is copied into the executable as plain text.
+
+The `int` before `main` is the function's return type. The name `main` is the designated entry function for a hosted C++ program. The parentheses form its parameter list. The braces delimit its function body. The expression statement writes a string to the standard output stream. The `return 0;` statement returns a status value to the host environment; zero conventionally indicates successful termination.
+
+The operator `<<` is the stream insertion operator in this context. The prefix `std::` qualifies names in the standard library namespace. The string literal contains the newline escape sequence `\\n`.
+
+### Lesson 04: Translation and compilation pipeline
+
+Preprocessing handles directives such as header inclusion, macro replacement and conditional compilation. The compiler then analyses the resulting translation unit: token structure, grammar, types, declarations, expressions and language constraints. A compiler implementation may build intermediate representations, perform optimization and generate assembly or machine code.
+
+An assembler translates assembly language into object code when the toolchain uses an explicit assembler stage. Some compiler pipelines use integrated assemblers or other internal arrangements.
+
+GCC inspection commands:
+
+```powershell
+g++ -std=c++20 -E main.cpp -o main.ii
+g++ -std=c++20 -S main.cpp -o main.s
+g++ -std=c++20 -c main.cpp -o main.o
+```
+
+Interpretation:
+
+1. `-E` stops after preprocessing.
+2. `-S` produces assembly output and stops before assembling.
+3. `-c` compiles and assembles but does not link an executable.
+
+The generated assembly is target-specific. It can differ across compiler versions, optimization settings and architectures. Never memorize assembly output as if it were part of the C++ language specification.
+
+### Lesson 05: Symbols, declarations and linking
+
+A declaration introduces a name and describes how it can be used. A definition provides the entity's required implementation or storage definition. The compiler can compile a call when it has seen a suitable declaration, even if the implementation is in another translation unit.
+
+The object file can therefore contain an unresolved symbol reference. The linker searches the supplied object files and libraries for a matching definition. If it cannot resolve a required reference, it reports a link failure.
+
+A common two-file build has `main.cpp` and `player.cpp`. Each is compiled as a translation unit. The driver coordinates compilation and linking:
+
+```powershell
+g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp player.cpp -o game.exe
+```
+
+The later language modules will study declarations, definitions, the One Definition Rule and linkage in depth. For this unit, understand the boundary: syntax and type analysis happen during compilation; external symbol resolution is a linking responsibility.
+
+### Lesson 06: Program loading, startup and runtime
+
+After an executable is built, a user or another process requests that the operating system start it. The operating system validates and maps the executable image according to platform rules, establishes a process environment, prepares required resources and transfers control through platform startup code.
+
+In a hosted C++ environment, runtime startup performs implementation and library initialization before entering `main`. When `main` returns, the runtime performs the required termination work and the process reports a status to its host.
+
+The exact executable format, loader, startup objects, virtual memory layout, calling convention and runtime implementation are platform-specific. The C++ standard specifies program behaviour at the language level; it does not prescribe the Windows PE loader or ELF process layout.
+
+Do not confuse the call stack with all process memory. A process can contain code mappings, static storage, dynamically allocated storage, thread stacks, shared libraries and operating system-managed mappings. These topics will be revisited in the memory and operating systems modules.
+
+### Lesson 07: Diagnostics and systematic debugging
+
+Classify the failure before changing code.
+
+| Failure | Typical stage | Example |
+|---|---|---|
+| Syntax or semantic diagnostic | Compilation | Missing semicolon or invalid type use |
+| Undefined external symbol | Linking | A declared function has no linked definition |
+| Missing runtime library or incompatible image | Loading or startup | Required platform component cannot be loaded |
+| Crash or abnormal termination | Execution | Invalid runtime operation or external failure |
+| Wrong game state | Logic | Health is displayed incorrectly despite successful execution |
+| Command not found | Shell environment | The compiler is not on the active PATH |
+
+A diagnostic is evidence, not a complete explanation. Read the first useful diagnostic, inspect the referenced file and line, identify the failing stage, form a hypothesis, make one focused change, then rebuild. Avoid random edits and avoid suppressing a warning before understanding it.
+
+### Lesson 08: Language modes, warnings and configurations
+
+The C++ standard evolves. The option `-std=c++20` asks GCC to use C++20 language mode. It does not upgrade the compiler, install missing libraries or guarantee that every optional facility is implemented.
+
+A useful baseline command is:
+
+```powershell
+g++ -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -g main.cpp -o game.exe
+```
+
+The warning options request additional diagnostics. `-g` requests debugging information. They do not prove correctness and do not automatically enable every static analysis facility.
+
+A Debug configuration usually prioritizes debugging information and a less transformed program. A Release configuration usually enables optimization and may omit some debugging support. The exact flags depend on the compiler and build system. Correct code must not rely on undefined behaviour, and a defect that appears only in Release must be investigated rather than dismissed.
+
+### Lesson 09: Build automation and CMake foundations
+
+A build system records how targets depend on source files, headers, libraries and compiler settings. CMake is a build-system generator. It configures a project and generates build files for a selected backend such as Ninja or a platform-native generator.
+
+The purpose of this lesson is to understand the relationship between source configuration and generated build instructions, not to memorize a large CMake file. Use a separate build directory so generated files do not pollute source control. A build directory configured for one compiler or generator should not be casually reused with another.
+
+### Lesson 10: First console program and engineering review
+
+The final program is intentionally small. It prints a title and a player status panel. Its engineering value lies in reproducibility, clarity, evidence and the student's ability to explain the build and execution path.
+
+The student must independently write the required program, build it with warnings enabled, deliberately investigate one defect, restore a correct version and explain why no manual dynamic allocation is necessary.
+
+## 7. Guided laboratory
+
+Create a working directory:
+
+```powershell
+mkdir CppLearning
+cd CppLearning
+```
+
+Create `main.cpp`:
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    std::cout << "The Last Signal\\n";
+    std::cout << "Player health: 100\\n";
 
     return 0;
 }
-~~~
+```
 
-Build in PowerShell:
+Build and execute:
 
-~~~powershell
-g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp -o game.exe
-~~~
-
-Execute:
-
-~~~powershell
-.\game.exe
-~~~
+```powershell
+g++ -std=c++20 -Wall -Wextra -Wpedantic -g main.cpp -o game.exe
+.\\game.exe
+```
 
 Expected output:
 
-~~~text
-THE LAST SIGNAL
+```text
+The Last Signal
 Player health: 100
-~~~
+```
 
-The expected output is a specification for comparison. Record the actual output from your own terminal when completing the laboratory.
+Compare the expected output with your actual terminal output. The expected text is not evidence that your machine successfully built the program.
 
-## 7. Compiler stage investigation
+## 8. Laboratory sequence
 
-GCC can expose parts of the build process. These commands are observational tools. They are not required for every normal build.
+### Lab A: Environment verification
 
-Preprocess without compiling:
+Record compiler version, selected path, target triple and exact build command. Explain why two terminals can select different compiler installations.
 
-~~~powershell
-g++ -std=c++20 -E main.cpp -o main.preprocessed.cpp
-~~~
+### Lab B: Artifact inspection
 
-Generate assembly output:
+Run the preprocessing, assembly and object generation commands. List the files produced. Describe what each artifact represents and what stage remains.
 
-~~~powershell
-g++ -std=c++20 -S main.cpp -o main.s
-~~~
+### Lab C: Compilation failure
 
-Compile to an object file without linking:
+Remove a required semicolon, rebuild and record the first useful diagnostic. Restore the semicolon and rebuild. Explain why the first failure is not a linker failure.
 
-~~~powershell
-g++ -std=c++20 -c main.cpp -o main.o
-~~~
+### Lab D: Linking failure
 
-Link an object file into an executable:
+Use a supplied two-file example in the examples directory. Omit one implementation file from the build command and observe the result. Explain why a declaration can allow compilation to proceed while the linker still cannot produce the final executable.
 
-~~~powershell
-g++ main.o -o game.exe
-~~~
+### Lab E: Reproducibility
 
-Inspect the generated files. Explain what each command produced and which stage remains. Do not assume that assembly output is identical across compiler versions, processor targets or optimization settings.
+Delete generated files and repeat the build from source. Record the compiler, command and output. Explain why a clean rebuild is valuable.
 
-## 8. Laboratory 01: Verify the environment
+## 9. Memory, ownership and performance
 
-**Objective:** Demonstrate that the compiler is installed and can build a C++20 program.
+This unit does not require manual dynamic allocation. The program uses a string literal and the standard output stream. Do not introduce raw pointers, `new` or `delete` to solve a task that only prints fixed text.
 
-Tasks:
+An executable on disk is not a process. Process creation establishes runtime resources and virtual memory mappings. This is operating-system-managed behaviour, not an instruction to allocate every region manually in application code.
 
-1. Open PowerShell.
-2. Run g++ --version.
-3. Record the complete version output.
-4. Run g++ -v and identify the target and configuration information that is visible.
-5. Create the guided example.
-6. Compile it using the stated C++20 warning options.
-7. Execute the program.
-8. Record the command, exit status where available and actual output.
+Build time, executable size and runtime performance are different measurements. Optimization can change generated instructions and program layout. Source line count is not a performance metric. Later modules introduce profiling and measurement before optimization.
 
-**Evidence:** Screenshot or copied terminal transcript, source file and a short explanation of the compiler version.
+## 10. Common misconceptions to eliminate
 
-## 9. Laboratory 02: Observe the build stages
+1. The compiler does not execute the program merely because it translates source code.
+2. The CPU does not directly execute C++ source text.
+3. The linker does not normally repair invalid C++ syntax.
+4. A header is not automatically a separately linked library.
+5. An object file is not necessarily a complete executable.
+6. An executable file is not the same thing as a running process.
+7. A warning is not proof of a defect, and the absence of warnings is not proof of correctness.
+8. One successful run does not prove correctness for all inputs and environments.
+9. C++20 mode is a compiler setting, not a guarantee of complete implementation support.
+10. Optimization does not make undefined behaviour valid.
 
-**Objective:** Distinguish preprocessing, compilation and linking.
+## 11. Independent programming task
 
-Tasks:
+Create `player_status.cpp` without copying the guided program and changing only the strings.
 
-1. Run the preprocessing command.
-2. Inspect the preprocessed file and locate content introduced by the standard header.
-3. Generate assembly output.
-4. Generate an object file.
-5. Link the object file.
-6. Compare the artifacts and explain the purpose of each.
+Required output:
 
-**Evidence:** List of generated files, commands and a paragraph explaining the pipeline.
-
-## 10. Laboratory 03: Diagnose a syntax error
-
-**Objective:** Learn to use diagnostics as evidence.
-
-Tasks:
-
-1. Build the working example.
-2. Remove the semicolon after one output statement.
-3. Compile again.
-4. Record the first meaningful diagnostic and the source location.
-5. Explain why the source is invalid.
-6. Restore the semicolon.
-7. Rebuild and execute the corrected program.
-
-Do not treat the exact wording of a diagnostic as portable. Different compiler versions may report the same underlying problem differently.
-
-## 11. Independent programming exercise
-
-Create player_status.cpp. The program must print a title and a player status panel containing health, lives and status.
-
-Required output layout:
-
-~~~text
+```text
+====================
+THE LAST SIGNAL
 ====================
 PLAYER STATUS
-====================
 Health: 100
 Lives: 3
 Status: Alive
-~~~
+```
 
 Requirements:
 
-1. Use standard output.
-2. Use readable indentation.
-3. Use a separate line for each output item.
-4. Compile in C++20 mode.
-5. Enable the warning options from the guided example.
-6. Deliberately introduce and then correct one syntax error.
-7. Do not copy the guided example and only change its text.
+1. Use a hosted C++ program with a valid `main` function.
+2. Use standard output and readable formatting.
+3. Compile in C++20 mode with `-Wall -Wextra -Wpedantic`.
+4. Deliberately introduce one syntax defect, record its diagnostic, then correct it.
+5. Use no classes, pointers, dynamic allocation or third-party framework.
+6. Submit the source, exact command, actual output and explanation of each statement.
+7. Explain what the compiler driver coordinates and why successful linking is not proof that the output is logically correct.
 
-Submit the complete source file, exact build command, actual output and the diagnostic observed during the deliberate error.
+## 12. Formal assessment
 
-## 12. Memory, ownership and performance
+The assessment is individual and evidence-based. It is completed only after the student has performed the laboratories and independent task.
 
-The examples in this module do not require application managed dynamic allocation. The output stream is provided by the standard library and runtime environment.
+| Category | Weight | Required evidence |
+|---|---:|---|
+| Technical understanding | 25 | Accurate explanation of translation and execution |
+| Code correctness | 30 | Independent source builds and meets output specification |
+| Memory safety and C++ practice | 20 | Valid program structure and appropriate use of standard facilities |
+| Engineering reasoning | 15 | Evidence-led failure investigation and design explanation |
+| Code quality and communication | 10 | Readable source and reproducible submission |
 
-An executable file is not the same thing as a running process. When the operating system loads a program, it creates a process environment with memory mappings, runtime state, stack and other operating system resources. These details vary by platform and are studied more deeply in later modules.
+**Pass threshold: 80/100.** The independent task must build, the student must explain the submitted source and process, and there must be no critical safety or correctness issue. A high theory score cannot compensate for failure to implement the task independently.
 
-Compilation time and executable size are build properties. Runtime performance depends on generated code, workload, algorithms, hardware and operating system behaviour. Do not infer runtime speed from source length or from a successful compilation.
+The assessment includes:
+1. Technical questions about source files, translation units, object files, linking, executable images and processes.
+2. Code analysis of a compilation defect and a linking defect.
+3. An independent implementation and successful build.
+4. Explanation of memory use, ownership, build reproducibility and diagnostic strategy.
 
-## 13. Common misconceptions
+## 13. Required submission
 
-1. A compiler does not execute the program merely by translating it.
-2. A compiler does not prove that game logic is correct.
-3. An executable does not continuously inspect source code.
-4. The linker and compiler have different responsibilities, even when one driver command invokes both.
-5. A warning is not always an error, but ignoring warnings without investigation is poor practice.
-6. A program that prints the expected output once may still contain defects that appear with other inputs or environments.
+1. Compiler name, version, target and selected executable path.
+2. Complete source code.
+3. Exact build command.
+4. Actual terminal output.
+5. Preprocessed, assembly and object artifact observations.
+6. One recorded diagnostic and the correction.
+7. Answers to the assessment questions.
+8. A short engineering reflection explaining what evidence establishes that the program was built and what evidence does not establish correctness.
 
-## 14. Assessment
+## 14. Authoritative references
 
-The assessment is completed only after the guided laboratories and independent exercise.
+1. ISO C++ working draft: https://eel.is/c++draft/
+2. cppreference language reference: https://en.cppreference.com/w/cpp
+3. GCC overall options: https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
+4. GCC warning options: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+5. GCC developer options: https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html
+6. Microsoft C++ build reference: https://learn.microsoft.com/en-us/cpp/build/reference/
+7. Clang documentation: https://clang.llvm.org/docs/
+8. CMake tutorial: https://cmake.org/cmake/help/latest/guide/tutorial/
 
-**A. Technical understanding, 25 points**
+## 15. Progression gate
 
-Explain the responsibilities of the preprocessor, compiler, object generation stage, linker and runtime. Explain the difference between source code, object code and an executable.
-
-**B. Code analysis and correctness, 30 points**
-
-Analyse a supplied program containing a syntax error and a separate build example containing an unresolved external symbol. Identify the likely failure stage and justify the diagnosis. Build the independent player status program correctly.
-
-**C. Memory safety and C++ practices, 20 points**
-
-Demonstrate appropriate standard header use, valid main structure, clear output statements and warning enabled compilation. Explain why the example does not require manual dynamic allocation.
-
-**D. Engineering reasoning, 15 points**
-
-Explain why reproducible compiler options matter, why compilation does not prove correctness and how you would investigate a build failure systematically.
-
-**E. Code quality and communication, 10 points**
-
-Submit readable source, exact commands, compiler version, actual output and a concise explanation of the investigation.
-
-**Pass threshold:** 80 out of 100, with a successful independent build and no critical unresolved issue. The student must explain the submitted work.
-
-## 15. Submission checklist
-
-1. Source code for the guided example.
-2. Source code for the independent player status program.
-3. Compiler version.
-4. Exact build commands.
-5. Actual terminal output.
-6. One recorded compiler diagnostic.
-7. Explanation of the build stages.
-8. Answers to the assessment questions.
-
-## 16. References
-
-1. ISO C++ working draft, program structure and execution: https://eel.is/c++draft/
-2. cppreference, compiler support and language reference: https://en.cppreference.com/
-3. GCC manual, overall options: https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
-4. GCC manual, warning options: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-5. Microsoft Learn, C++ build reference: https://learn.microsoft.com/en-us/cpp/build/reference/
-6. LearnCpp, introduction to the compiler and linker: https://www.learncpp.com/
-
-## 17. Progression rule
-
-Module 02 remains unavailable until the student has completed the independent exercise, submitted evidence and achieved the required assessment result. A request to continue or a completed exercise alone does not constitute a pass.
+Module 02 remains locked until the independent task and formal assessment are reviewed. Time spent, reading completion and a statement that the work is finished do not constitute proof of mastery. A failed attempt results in targeted remediation and a fresh reassessment with changed questions and code.
