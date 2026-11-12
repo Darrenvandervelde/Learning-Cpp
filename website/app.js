@@ -177,7 +177,15 @@
       if (!renderer) throw new Error("The lesson renderer could not load. Check your internet connection and refresh the page.");
       $("#lesson-content").innerHTML = renderer.render(markdown);
       $("#lesson-content").querySelectorAll("a[href]").forEach((link) => {
-        if (link.hostname && link.hostname !== location.hostname) { link.target = "_blank"; link.rel = "noreferrer"; }
+        const href = link.getAttribute("href");
+        if (href && !/^(https?:|mailto:|#|\/)/i.test(href)) {
+          link.href = sourceRoot + module.slug + "/" + href.replace(/^\.\//, "");
+          link.target = "_blank";
+          link.rel = "noreferrer";
+        } else if (link.hostname && link.hostname !== location.hostname) {
+          link.target = "_blank";
+          link.rel = "noreferrer";
+        }
       });
       addCopyButtons();
       makeTableOfContents();
