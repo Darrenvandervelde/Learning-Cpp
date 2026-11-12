@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn modern C++ through practical game development, from programming fundamentals to custom game engine architecture.">
+  <meta name="theme-color" content="#101b2d">
+  <title>Learn C++ — Game Development Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="Learn C++ home"><span class="brand-mark">C++</span><span>GAME<span class="brand-muted">DEV</span><small>LEARNING ACADEMY</small></span></a>
+    <button id="mobile-menu" class="icon-button mobile-menu" aria-label="Toggle course navigation" aria-expanded="false">☰</button>
+    <nav class="top-links" aria-label="Main navigation">
+      <a class="active" href="#home">Learn</a><a href="#curriculum">Curriculum</a><a href="#projects">Projects</a><a href="https://github.com/Darrenvandervelde/Learning-Cpp" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+    <div class="top-actions"><span class="version-pill">C++20</span><a class="github-link" href="https://github.com/Darrenvandervelde/Learning-Cpp" target="_blank" rel="noreferrer">View repository ↗</a></div>
+  </header>
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-heading">LEARNING PATH</div>
+        <a class="side-home active" href="#home">⌂ <span>Course overview</span></a>
+        <div class="progress-card"><div class="progress-row"><span>Your progress</span><strong id="progress-label">0 / 20</strong></div><div class="progress-track"><span id="progress-bar"></span></div><small>Progress is saved in this browser.</small></div>
+        <div class="sidebar-heading modules-heading">C++ COURSE MODULES</div>
+        <label class="search-box"><span>⌕</span><input id="module-search" type="search" placeholder="Search C++ topics…" autocomplete="off"></label>
+        <div id="module-nav" class="module-nav" aria-label="Course modules"></div>
+        <div class="sidebar-bottom"><span class="status-dot"></span> C++20 learning track <small>Built for game developers</small></div>
+      </div>
+    </aside>
+    <main id="main-content" class="main-content">
+      <section id="home-view" class="home-view">
+        <div class="hero">
+          <div class="hero-copy"><div class="eyebrow"><span></span> THE GAME DEVELOPER'S C++ PATH</div><h1>Learn C++.<br><em>Build games.</em><br>Understand engines.</h1><p>Go beyond syntax. Learn how professional game systems work—from memory and performance to rendering, physics and engine architecture.</p><div class="hero-actions"><button id="start-learning" class="button-primary">Start learning <span>→</span></button><a class="button-secondary" href="#curriculum">Explore the curriculum</a></div><div class="hero-meta"><span>20 structured modules</span><i></i><span>C++20 by default</span><i></i><span>Project-led learning</span></div></div>
+          <div class="hero-art" aria-label="Abstract game engine code illustration"><div class="art-glow"></div><div class="code-window"><div class="window-bar"><span></span><span></span><span></span><b>game_loop.cpp</b></div><pre><code><span class="code-purple">while</span> (game.isRunning())
+{
+    <span class="code-comment">// Read player input</span>
+    input.update();
+
+    <span class="code-comment">// Simulate the world</span>
+    physics.step(deltaTime);
+
+    <span class="code-comment">// Render the frame</span>
+    renderer.draw(scene);
+}</code></pre><div class="code-status"><span>●</span> ENGINE RUNNING <b>60 FPS</b></div></div><div class="art-chip chip-one">C++20 <span>Modern C++</span></div><div class="art-chip chip-two">01—20 <span>Learning path</span></div></div>
+        </div>
+        <section class="intro-section"><div class="section-kicker">START WITH THE FOUNDATIONS</div><h2>From your first program to your own engine.</h2><p class="section-lead">A progressive curriculum designed to develop independent C++ engineers—not just framework users.</p>
+          <div class="feature-grid"><article class="feature-card"><div class="feature-icon purple">⌘</div><h3>Understand C++ deeply</h3><p>Learn types, functions, classes, ownership, lifetimes, templates and modern C++ practices.</p></article><article class="feature-card"><div class="feature-icon blue">◈</div><h3>Build game systems</h3><p>Apply each concept to gameplay, input, game loops, collision, resources and architecture.</p></article><article class="feature-card"><div class="feature-icon green">▧</div><h3>Think like an engineer</h3><p>Debug, test, profile and make informed decisions about memory, performance and design.</p></article></div>
+        </section>
+        <section id="curriculum" class="curriculum-section"><div class="section-kicker">THE CURRICULUM</div><div class="section-title-row"><div><h2>Choose your next lesson.</h2><p class="section-lead">Follow the modules in order. Each one builds on the skills before it.</p></div><span class="module-count">20 MODULES</span></div><div id="module-cards" class="module-cards"></div></section>
+        <section id="projects" class="project-banner"><div><div class="section-kicker">LEARN BY BUILDING</div><h2>One journey. Real game projects.</h2><p>Start with a console game, progress into 2D systems, then develop the knowledge to design a custom engine.</p><a href="https://github.com/Darrenvandervelde/Learning-Cpp/tree/curriculum/20-modular-lessons" target="_blank" rel="noreferrer">Explore the project files ↗</a></div><div class="project-stages"><span>01 <b>Console game</b></span><span>02 <b>2D game systems</b></span><span>03 <b>Custom engine</b></span></div></section>
+        <footer class="site-footer"><span>LEARN C++ · GAME DEVELOPMENT ACADEMY</span><span>Open learning resource · C++20</span></footer>
+      </section>
+      <section id="lesson-view" class="lesson-view" hidden>
+        <div class="lesson-topline"><a href="#home">Home</a><span>/</span><span id="lesson-breadcrumb">Module 01</span></div>
+        <div class="lesson-heading"><div class="section-kicker" id="lesson-kicker">MODULE 01 · FOUNDATIONS</div><h1 id="lesson-title"></h1><p id="lesson-description"></p><div class="lesson-meta"><span id="lesson-duration">Structured learning module</span><span>·</span><span>C++20</span></div></div>
+        <div class="lesson-layout"><article id="lesson-content" class="markdown-content"><div class="loading-state">Loading lesson content…</div></article><aside class="lesson-aside"><div class="aside-card"><div class="aside-kicker">MODULE PROGRESS</div><div id="lesson-progress-state" class="progress-state">Not completed</div><button id="complete-module" class="button-primary full-button">Mark module complete</button><p>Mark this module complete after studying the theory, building the examples and completing its independent assessment.</p></div><div class="aside-card"><div class="aside-kicker">IN THIS MODULE</div><nav id="lesson-toc" class="lesson-toc"></nav></div><div class="aside-card resources-card"><div class="aside-kicker">KEEP LEARNING</div><a id="source-link" href="#" target="_blank" rel="noreferrer">View source on GitHub ↗</a><a href="https://en.cppreference.com/w/cpp" target="_blank" rel="noreferrer">C++ language reference ↗</a></div></aside></div>
+        <div class="lesson-navigation"><button id="previous-module" class="button-secondary">← Previous module</button><button id="next-module" class="button-primary">Next module →</button></div>
+        <footer class="site-footer"><span>LEARN C++ · GAME DEVELOPMENT ACADEMY</span><span>Practice. Build. Understand.</span></footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
