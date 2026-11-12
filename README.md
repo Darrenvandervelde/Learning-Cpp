@@ -1,67 +1,55 @@
-# Learning C++ — Game Development and Engine Foundations
+# Learning C++ — From Fundamentals to Game Engine Development
 
-A project-led C++20 path from the first compiled program to the foundations of professional game systems and engine development.
+A practical, assessment-driven C++20 learning repository. The goal is not merely to make programs compile: it is to understand how C++ works, build complete games incrementally, and develop the engineering judgement required to design engine systems.
 
 ## Start here
 
-**[Open the 20-module curriculum](curriculum/README.md)**
+1. Read [the modular learning path](modules/README.md).
+2. Begin with [C++ basics](modules/cpp-basics/README.md).
+3. Follow the [20 learning modules](modules/README.md) in order.
+4. Use the [build-a-module guide](modules/BUILD-A-MODULE.md) to understand how each lesson is structured.
+5. Follow [build a game from scratch](modules/GAME-FROM-SCRATCH.md) as the cumulative project.
 
-Every module includes game-development context, concepts, a focused C++ example, memory/ownership/performance notes, common mistakes, an independent exercise, code-review guidance and a mandatory assessment.
+## Three learning tracks
 
-## The 20 modules
-
-1. [Toolchain, compilation and first program](curriculum/modules/01-toolchain-compilation-first-program.md)
-2. [Program structure, headers and namespaces](curriculum/modules/02-program-structure-headers-namespaces.md)
-3. [Types, variables and constants](curriculum/modules/03-types-variables-constants.md)
-4. [Console input and output](curriculum/modules/04-console-input-output.md)
-5. [Operators and expressions](curriculum/modules/05-operators-expressions.md)
-6. [Decisions and loops](curriculum/modules/06-decisions-and-loops.md)
-7. [Functions and interfaces](curriculum/modules/07-functions-interfaces.md)
-8. [Arrays, strings and views](curriculum/modules/08-arrays-strings-views.md)
-9. [Structures, enums and value types](curriculum/modules/09-structs-enums-value-types.md)
-10. [Classes and encapsulation](curriculum/modules/10-classes-encapsulation.md)
-11. [Constructors, destructors and lifetime](curriculum/modules/11-constructors-destructors-lifetime.md)
-12. [Pointers, references and const correctness](curriculum/modules/12-pointers-references-const.md)
-13. [Ownership, dynamic memory and smart pointers](curriculum/modules/13-ownership-dynamic-memory-smart-pointers.md)
-14. [Copy, move and value semantics](curriculum/modules/14-copy-move-value-semantics.md)
-15. [Containers, algorithms and iterators](curriculum/modules/15-containers-algorithms-iterators.md)
-16. [Templates, concepts and compile-time tools](curriculum/modules/16-templates-concepts-compile-time.md)
-17. [Errors, debugging, testing and sanitizers](curriculum/modules/17-errors-debugging-testing.md)
-18. [CMake, multi-file projects and Git](curriculum/modules/18-cmake-multifile-git.md)
-19. [Console game architecture and game loop](curriculum/modules/19-console-game-architecture-loop.md)
-20. [Engineering quality, profiling and next steps](curriculum/modules/20-engineering-quality-profiling-next-steps.md)
-
-## Engineering principles
-
-- C++20 by default; introduce C++23 only when useful.
-- Prefer RAII, standard containers and explicit ownership over manual memory management.
-- Build with warnings, use CMake for multi-file projects, and track work with Git.
-- Profile before optimising; a successful compile is not proof of correctness.
-- Do not skip assessment gates.
-
-## Assessment policy
-
-Each module is graded out of 100: technical understanding 25%, code correctness 30%, memory safety/C++ practices 20%, engineering reasoning 15%, and code quality 10%. Passing requires at least 80%, a working implementation where applicable, no critical memory-safety/undefined-behaviour/ownership issue, and independent completion of the core task. Failed modules remain locked until targeted practice and a fresh reassessment.
+| Track | Purpose |
+|---|---|
+| C++ basics | Learn syntax, types, functions, classes, memory, the standard library, debugging and build tools. |
+| Build a module | Learn how to turn a requirement into a small, testable, documented C++ system. |
+| Build a game | Apply each concept to a growing game, from a console prototype to a modular 2D game and engine. |
 
 ## Repository layout
 
 ```text
 Learning-Cpp/
 ├── README.md
-├── curriculum/
+├── modules/
 │   ├── README.md
-│   └── modules/       # 20 detailed lessons
-├── docs/              # existing quick guides and compiler notes
-├── Game Docs/         # existing game documentation
-└── books/             # existing reference material
+│   ├── CPP-BASICS.md
+│   ├── BUILD-A-MODULE.md
+│   ├── GAME-FROM-SCRATCH.md
+│   ├── 01-toolchain-compilation-first-program/
+│   │   └── README.md
+│   ├── ... 02 through 20 ...
+│   ├── cpp-basics/
+│   │   └── reference/
+│   └── toolchain/
+│       └── reference/
+├── Game Docs/
+└── books/
 ```
 
-The earlier numbered guides in `docs/` are retained as supplementary quick references. The new curriculum is the canonical, ordered learning path. Existing game documentation, compiler notes and reference material are preserved.
+## Engineering standard
 
-## Build baseline
+- C++20 by default; C++23 only when it adds clear value.
+- Build reproducibly with CMake and a documented compiler.
+- Prefer RAII, value semantics, explicit ownership and small interfaces.
+- Test behaviour and edge cases; use warnings and sanitizers.
+- Profile before optimising.
+- Complete the independent assessment for every module.
 
-GCC/Clang: `g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp -o game`
+## Assessment gate
 
-Windows PowerShell: `.\game.exe`
+Every module ends with technical questions, code analysis, an independent coding task and engineering reasoning. The pass mark is **80/100**, with no critical memory-safety, undefined-behaviour or ownership errors. A module is not passed merely because its exercise was completed.
 
-See Module 01 for toolchain verification and Module 18 for CMake. See the [curriculum index](curriculum/README.md) for the full sequence.
+See [modules/README.md](modules/README.md) for the full sequence and progression rules.
